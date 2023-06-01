@@ -59,7 +59,7 @@ def load_tasks(filename):
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="ToDo List Manager")
-    parser.add_argument('--file', default='todo_list.txt', help='./todo_list.txt')
+    parser.add_argument('--file', default='todo_list.txt', help='Path to file')
     parser.add_argument('command', choices=['add', 'complete', 'delete', 'view'])
     parser.add_argument('--title', help="Title of the task")
     parser.add_argument('--description', help="Description of the task")
