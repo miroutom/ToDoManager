@@ -1,4 +1,4 @@
-name: ToDo
+name: Build and Deploy
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +25,19 @@ jobs:
         run: pip install -r requirements.txt
 
 
-      - name: ToDo
-        run: python toDo.py add --title "Clean house" --description "Dish, floor, windows"
+      - name: Build
+        run: python toDo.py --file ./todo_list.txt
+      
+      
+      - name: Archive artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: todo-list-artifact
+          path: todo_list.txt
+      
+      
+      - name: Deploy artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: todo-list-deploy
+          path: todo_list.txt
