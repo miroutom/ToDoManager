@@ -1,10 +1,7 @@
 import argparse
 
 
-tasks = []
-
-
-def add_task(title, description) -> None:
+def add_task(tasks, title, description) -> None:
     task = {
         "title": title,
         "description": description,
@@ -14,7 +11,7 @@ def add_task(title, description) -> None:
     print("Your task is added successfully!")
 
 
-def view_tasks() -> None:
+def view_tasks(tasks) -> None:
     print("List of tasks:")
     for index, task in enumerate(tasks):
         print(f"{index + 1}. Title: {task['title']}")
@@ -22,7 +19,7 @@ def view_tasks() -> None:
         print(f"Completed: {'Yes' if task['completed'] else 'No'}")
 
 
-def complete_task(title) -> None:
+def complete_task(tasks, title) -> None:
     for task in tasks:
         if task['title'] == title:
             task['completed'] = True
@@ -31,7 +28,7 @@ def complete_task(title) -> None:
     print("This task is not found.")
 
 
-def delete_task(title) -> None:
+def delete_task(tasks, title) -> None:
     for task in tasks:
         if task['title'] == title:
             del tasks[task]
@@ -40,24 +37,45 @@ def delete_task(title) -> None:
     print("This task is not found.")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="ToDo List Manager")
-    parser.add_argument('command', choices=['add', 'complete', 'delete', 'view'])
-    parser.add_argument('--title', help="Title of the task")
-    parser.add_argument('--description', help="Description of the task")
+def save_tasks(tasks, filename):
+    with open(filename, 'w') as file:
+        for task in tasks:
+            file.write(f"{task['title']},{task['description']},{task['completed']}\n")
 
+
+def load_tasks(filename):
+    tasks = []
+    with open(filename, 'r') as file:
+        for line in file:
+            data = line.strip().split(',')
+            task = {
+                'title': data[0],
+                'description': data[1],
+                'completed': data[2] == 'True'
+            }
+            tasks.append(task)
+    return tasks
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', default='todo_list.txt', help='Path to the todo list file')
     args = parser.parse_args()
 
+    tasks = load_tasks(args.file)
+
     if args.command == 'add':
-        add_task(args.title, args.description)
+        add_task(tasks, args.title, args.description)
     elif args.command == 'complete':
-        complete_task(args.title)
+        complete_task(tasks, args.title)
     elif args.command == 'delete':
-        delete_task(args.title)
+        delete_task(tasks, args.title)
     elif args.command == 'view':
-        view_tasks()
+        view_tasks(tasks)
     else:
         return
+
+    save_tasks(tasks, args.file)
 
 
 if __name__ == '__main__':
