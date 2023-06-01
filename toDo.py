@@ -1,14 +1,13 @@
+import argparse
+
+
 tasks = []
 
 
-def add_task() -> None:
-    title = input("Enter the title of your task: ")
-    description = input("Enter the description of your task: ")
-    deadline = input("Enter the deadline of your task: ")
+def add_task(title, description) -> None:
     task = {
         "title": title,
         "description": description,
-        "deadline": deadline,
         "completed": False
     }
     tasks.append(task)
@@ -18,46 +17,47 @@ def add_task() -> None:
 def view_tasks() -> None:
     print("List of tasks:")
     for index, task in enumerate(tasks):
-        print(f"{index + 1}. {task['title']}: {task['description']}.\n"
-              f"Deadline: {task['deadline']} - {task['completed']}")
+        print(f"{index + 1}. Title: {task['title']}")
+        print(f"Description: {task['description']}")
+        print(f"Completed: {'Yes' if task['completed'] else 'No'}")
 
 
-def complete_task() -> None:
-    task_number = int(input("Enter the number of task that you want to mark as done: "))
-    if 1 <= task_number <= len(tasks):
-        task = tasks[task_number - 1]
-        task['completed'] = True
-        print("Your task is mark as done!")
-    else:
-        print("Wrong number!")
+def complete_task(title) -> None:
+    for task in tasks:
+        if task['title'] == title:
+            task['completed'] = True
+            print("Your task is marked as done.")
+            return
+    print("This task is not found.")
 
 
-def delete_task() -> None:
-    task_number = int(input("Enter the number of task that you want to delete: "))
-    if 1 <= task_number <= len(tasks):
-        del tasks[task_number - 1]
-        print("Your task is deleted successfully!")
-    else:
-        print("Wrong number!")
+def delete_task(title) -> None:
+    for task in tasks:
+        if task['title'] == title:
+            del tasks[task]
+            print("Your task is deleted successfully.")
+            return
+    print("This task is not found.")
 
 
 def main() -> None:
-    print("Menu:\n1. Add a task\n2. See tasks\n3. Mark a task as done\n4. Delete a task\n0. Quit")
-    while True:
-        choice = int(input("Choose the option: "))
+    parser = argparse.ArgumentParser(description="ToDo List Manager")
+    parser.add_argument('command', choices=['add', 'complete', 'delete', 'view'])
+    parser.add_argument('--title', help="Title of the task")
+    parser.add_argument('--description', help="Description of the task")
 
-        if choice == 1:
-            add_task()
-        elif choice == 2:
-            view_tasks()
-        elif choice == 3:
-            complete_task()
-        elif choice == 4:
-            delete_task()
-        elif choice == 0:
-            break
-        else:
-            print("Wrong choice. Try again.")
+    args = parser.parse_args()
+
+    if args.command == 'add':
+        add_task(args.title, args.description)
+    elif args.command == 'complete':
+        complete_task(args.title)
+    elif args.command == 'delete':
+        delete_task(args.title)
+    elif args.command == 'view':
+        view_tasks()
+    else:
+        return
 
 
 if __name__ == '__main__':
