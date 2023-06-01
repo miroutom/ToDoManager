@@ -26,7 +26,7 @@ jobs:
 
 
       - name: Build
-        run: python toDo.py add --file todo_list.txt
+        run: python toDo.py --file ./todo_list.txt
       
       
       - name: Archive artifact
