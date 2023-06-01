@@ -54,24 +54,27 @@ def load_tasks(filename):
                 'completed': data[2] == 'True'
             }
             tasks.append(task)
-    return tasks
+    return task
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--file', default='todo_list.txt', help='Path to the todo list file')
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description="ToDo List Manager")
+    parser.add_argument('--file', default='todo_list.txt', help='./todo_list.txt')
+    parser.add_argument('command', choices=['add', 'complete', 'delete', 'view'])
+    parser.add_argument('--title', help="Title of the task")
+    parser.add_argument('--description', help="Description of the task")
 
+    args = parser.parse_args()
     tasks = load_tasks(args.file)
 
     if args.command == 'add':
-        add_task(tasks, args.title, args.description)
+        add_task(args.title, args.description)
     elif args.command == 'complete':
-        complete_task(tasks, args.title)
+        complete_task(args.title)
     elif args.command == 'delete':
-        delete_task(tasks, args.title)
+        delete_task(args.title)
     elif args.command == 'view':
-        view_tasks(tasks)
+        view_tasks()
     else:
         return
 
