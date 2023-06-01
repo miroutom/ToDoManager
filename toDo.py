@@ -54,7 +54,7 @@ def load_tasks(filename):
                 'completed': data[2] == 'True'
             }
             tasks.append(task)
-    return task
+    return tasks
 
 
 def main() -> None:
@@ -68,13 +68,13 @@ def main() -> None:
     tasks = load_tasks(args.file)
 
     if args.command == 'add':
-        add_task(args.title, args.description)
+        add_task(tasks, args.title, args.description)
     elif args.command == 'complete':
-        complete_task(args.title)
+        complete_task(tasks, args.title)
     elif args.command == 'delete':
-        delete_task(args.title)
+        delete_task(tasks, args.title)
     elif args.command == 'view':
-        view_tasks()
+        view_tasks(tasks)
     else:
         return
 
