@@ -26,4 +26,4 @@ jobs:
 
 
       - name: ToDo
-        run: python toDo.py  
+        run: python toDo.py add --title "Clean house" --description "Dish, floor, windows"
