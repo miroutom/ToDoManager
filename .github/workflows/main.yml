@@ -23,7 +23,15 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-
+      
+      - name: Run static code analysis
+        run: pylint toDo.py
+        
+      - name: Check code style
+        run: flake8 toDo.py
+      
+      - name: Run tests
+        run: python -m unittest discover
 
       - name: Build
         run: python toDo.py --file todo_list.txt add --title "Clean house" --description "Floor, windows, dish"
