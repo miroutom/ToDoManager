@@ -31,16 +31,16 @@ jobs:
         run: pip install flake8
       
       - name: Run static code analysis
-        run: pylint toDo.py
+        run: pylint todo.py
         
       - name: Check code style
-        run: flake8 toDo.py
+        run: flake8 todo.py
       
       - name: Run tests
         run: python -m unittest discover
 
       - name: Build
-        run: python toDo.py --file todo_list.txt add --title "Clean house" --description "Floor, windows, dish"
+        run: python todo.py --file todo_list.txt add --title "Clean house" --description "Floor, windows, dish"
       
       
       - name: Archive artifact
